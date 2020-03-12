@@ -7,6 +7,15 @@ import (
 	"os"
 )
 
+var (
+	CompressionMethod       = flag.String("c", "", "")
+	WikipediaDumpXML        = flag.String("x", "", "")
+	SearchQuery             = flag.String("q", "", "")
+	maxIndexCount           = flag.Int("m", -1, "")
+	IIBufferUpdateThreshold = flag.Int("t", 0, "")
+	EnablePharseSearch      = flag.Bool("s", false, "")
+)
+
 const (
 	exitSuccess = 0
 	exitFailure = -1
