@@ -22,13 +22,38 @@ const (
 )
 
 func main() {
-	os.Exit(realMain(os.Args))
+	flag.Parse()
+	os.Exit(realMain(flag.Args()))
 }
 
 func realMain(argv []string) int {
-	flag.Parse()
-	env, err := wiser.NewEnv()
+	if len(argv) <= 0 {
+		return exitFailure
+	}
+	if WikipediaDumpXML != nil {
+		if _, err := os.Stat(*WikipediaDumpXML); err != nil {
+			fmt.Println(err)
+			return exitFailure
+		}
+	}
+
+	dbPath := argv[1]
+	env, err := wiser.NewEnv(
+		*IIBufferUpdateThreshold,
+		*EnablePharseSearch,
+		dbPath,
+	)
 	if err != nil {
+		fmt.Println(err)
+		return exitFailure
+	}
+	defer env.Close()
+
+	var method CompressionMethod
+	if CompressionMethod != nil {
+		method = NewCompressionMethod(*CompressionMethod)
+	}
+	if err := env.Index(method); err != nil {
 		fmt.Println(err)
 		return exitFailure
 	}

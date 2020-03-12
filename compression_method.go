@@ -6,3 +6,7 @@ const (
 	CompressionMethodNone CompressionMethod = iota
 	CompressionMethodGolomb
 )
+
+func NewCompressionMethod(m string) CompressionMethod {
+	return CompressionMethodNone
+}
